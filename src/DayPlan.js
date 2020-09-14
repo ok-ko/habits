@@ -5,11 +5,19 @@ const Habits = [
     {title: 'Study English', isDone: true},
     {title: 'Study React', isDone: false},
     {title: 'Drink water', isDone: false},
-    {title: 'No smoking', isDone: false}
+    {title: 'No smoking', isDone: false},
+    {title: 'Smile', isDone: true}
 ];
 
 
-var now = new Date().toLocaleDateString();
+let now = new Date(),
+    year = now.getFullYear(),
+    month = String(now.getMonth()+1).padStart(2, '0'),
+    day = String(now.getDate()).padStart(2,'0');
+now = year+'-'+month+'-'+day;
+
+let doneMessage = `"Звичка - друга натура"`;
+
 
 function DayHead() {
     return(
@@ -29,10 +37,11 @@ function DayHead() {
                        aria-label="Sizing example input"
                        aria-describedby="inputGroup-sizing-sm"
                        value={now}
+                       // disabled={true}
                 />
             </div>
-            <div className="alert alert-light" role="alert" align="center" style={{width:400}}>
-                "Звичка - друга натура"
+            <div className="alert alert-light" role="alert" align="center" style={{width:400}} >
+                {doneMessage}
             </div>
         </div>
     )
@@ -44,18 +53,13 @@ function CheckHabit(props) {
     <div className="input-group mb-3" style={{width:400}}>
         <div className="input-group-prepend">
             <div className="input-group-text">
-                <input type="checkbox" aria-label="Checkbox for following text input" value="true"/>
+                <input type="checkbox" aria-label="Checkbox for following text input" checked={props.isDone} />
             </div>
         </div>
         <input type="text" className="form-control" aria-label="Text input with checkbox" value={props.title}/>
     </div>)
 }
 
-function habitsList() {
-    for (let i = 0; i <= Habits.length; i++) {
-        alert(Habits[i].title);
-    }
-}
 
 function Buttons() {
     return (
@@ -68,45 +72,20 @@ function Buttons() {
 }
 
 class DayPlan extends React.Component{
-    constructor(props) {
-        super(props);
-        this.state = Habits;
-
-    }
-
-    componentDidMount() {
-        for (let i=1; i<this.state.length; i++) {
-
-            alert(Habits[i].title);
-
-            {/*
-             ------- чому ні? --------
-             CheckHabit (Habits[i].title);
-             */}
-
-        }
-
-    }
-
-
-
     render() {
         return (<div className="DayPlan">
             <div>
                 <DayHead/>
 
-                <CheckHabit title = {this.state[0].title}/>
-
-                <CheckHabit title = {Habits[1].title}/>
-                <CheckHabit title = {Habits[2].title}/>
-                <CheckHabit title = {Habits[3].title}/>
+                {Habits.map((h, index) =>
+                        <CheckHabit title = {h.title} isDone = {h.isDone} key={index}/>)}
 
                 <Buttons/>
             </div>
+
+
         </div>)
     }
-
-
 }
 
 export default DayPlan;
