@@ -44,16 +44,6 @@ class StatButton extends React.Component {
         console.log(this.props);
         console.log(this.state.name);
         this.props.updateData(this.state.name);
-        // this.props(this.state.name);
-        //  this.setState(this.props) ;
-        // this.setState(props.updateData() => state.name))
-
-// console.log(this.state.name)
-//         console.log(this.props);
-
-        // updateData = (value) => {
-        //     this.setState({ name: value })
-        // }
     }
 
     render() {
@@ -124,9 +114,7 @@ class SaveButton extends React.Component {
     }
 
     handleClick() {
-        console.log(this.props.updateData);
-        console.log(this.state.name);
-        this.props.updateData(this.state.name);
+         this.props.updateData(this.state.name);
 
     }
 
@@ -148,7 +136,6 @@ class Buttons extends React.Component {
         name: ''
     };
 
-
     updateData = (value) => {
         this.setState({ name: value });
     }
@@ -158,8 +145,8 @@ class Buttons extends React.Component {
             <div>
                 <div className="btn-group" role="group" aria-label="Basic example" style={{width:400}}>
                     <SaveButton updateData={this.updateData} />
-                    <StatButton updatedata={this.updateData} />
-                    <SettingsButton updatedata={this.updateData} />
+                    <StatButton updateData={this.updateData} />
+                    <SettingsButton updateData={this.updateData} />
 
                     {/*<button type="button" className="btn btn-secondary" onClick={() => handleClickStat()}>Статистика</button>*/}
                     {/*<button type="button" className="btn btn-secondary">Налаштування</button>*/}

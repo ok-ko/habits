@@ -6,7 +6,7 @@ class DayHead  extends React.Component{
         super(props);
         this.handleChange = this.handleChange.bind(this);
         this.state = {reportDate : this.now};
-        console.log(this.state);
+        // console.log(this.state);
     }
 
 
@@ -28,9 +28,15 @@ class DayHead  extends React.Component{
         let year = curDate.getFullYear();
         let month = String(curDate.getMonth()+1).padStart(2, '0');
         let day = String(curDate.getDate()).padStart(2,'0');
-        return ((year+'-'+month+'-'+day), console.log((year+'-'+month+'-'+day)))
-        
-    };
+        // return year+'-'+month+'-'+day
+
+        return year+'-'+month+'-'+day
+    }
+
+
+        // return ((year+'-'+month+'-'+day),
+        //         console.log((year+'-'+month+'-'+day)))
+
 
     // let now = new Date(),
     // year = now.getFullYear(),
@@ -59,6 +65,8 @@ class DayHead  extends React.Component{
 
     render() {
         return(
+            console.log(this.now()),
+
             <div className="DayPlan">
                 <div className="alert alert-dark" role="alert"  align="center" style={{width:400}}>
                     Трекер корисних звичок
@@ -70,11 +78,10 @@ class DayHead  extends React.Component{
                     <div className="input-group-prepend">
                         <span className="input-group-text" id="inputGroup-sizing-sm">сьогодні</span>
                     </div>
-                    {console.log(this.now())}
                     <input type="date" className="form-control"
                            aria-label="Sizing example input"
                            aria-describedby="inputGroup-sizing-sm"
-                           defaultValue={'2020-09-18'}
+                           defaultValue={this.now()}
                            // onChange={this.handleChange}
                            // value ={'2020-09-18'}
                            //this.state.reportDate
