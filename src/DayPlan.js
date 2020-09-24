@@ -10,8 +10,6 @@ class StatButton extends React.Component {
     }
 
     handleClick() {
-        // console.log(this.props);
-        // console.log(this.state.name);
         this.props.updateData(this.state.name);
     }
 
@@ -27,6 +25,7 @@ class StatButton extends React.Component {
         );
     }
 }
+
 
 class SettingsButton extends React.Component {
     state = {
@@ -51,15 +50,10 @@ class SettingsButton extends React.Component {
 }
 
 
-
 class SaveButton extends React.Component {
     constructor(props){
         super(props);
         this.state = {name: 'Звичка - з сейвбаттона'}
-        // this.handleClick = this.handleClick.bind(this);
-        // this.state.Report = {repDate: 'date'
-        // };
-        // console.log(this.state.Report)
     }
 
     handleClick() {
@@ -68,7 +62,6 @@ class SaveButton extends React.Component {
 
     render() {
         return (
-
             <button
                 type="button"
                 className="btn btn-secondary"
@@ -76,42 +69,10 @@ class SaveButton extends React.Component {
             >
                 Save the day
             </button>
-
         );
     }
 }
 
-// class Buttons extends React.Component {
-    // state = {
-    //     name: ''
-    // };
-    //
-    // updateData = (value) => {
-    //     this.setState({ name: value });
-    // };
-
-//     render() {
-//         return (
-//             <div>
-//                 <div className="btn-group" role="group" aria-label="Basic example" style={{width:400}}>
-//                     <SaveButton updateData={this.updateData} />
-//                     <StatButton updateData={this.updateData} />
-//                     <SettingsButton updateData={this.updateData} />
-//
-//                     {/*<button type="button" className="btn btn-secondary" onClick={() => handleClickStat()}>Статистика</button>*/}
-//                     {/*<button type="button" className="btn btn-secondary">Налаштування</button>*/}
-//                 </div>
-//
-//                 <div className="alert alert-light" role="alert" align="center" style={{width:400}} >
-//                     {this.state.name}
-//                 </div>
-//                 <div>
-//                     <DayAlert doneMessage={this.state.name}/>
-//                 </div>
-//             </div>
-//         );
-//     }
-// }
 
 function CheckHabit(props) {
     return (
@@ -127,7 +88,6 @@ function CheckHabit(props) {
 
 
 function DayAlert(props) {
-
     const {doneMessageState} = props;
     return (
         <div className="alert alert-light" role="alert" align="center" style={{width:400}} >
@@ -140,28 +100,15 @@ class DayHead  extends React.Component{
     constructor(props) {
         super(props);
         this.handleChange = this.handleChange.bind(this);
-        this.state = {reportDate : this.now()};
-        this.now = this.now.bind(this);
-
-
-    }
-
-    now() {
-        let curDate = new Date();
-        let year = curDate.getFullYear();
-        let month = String(curDate.getMonth()+1).padStart(2, '0');
-        let day = String(curDate.getDate()).padStart(2,'0');
-        return year+'-'+month+'-'+day
     }
 
     handleChange(e) {
-        // this.setState({reportDate:e.target.value})
         this.props.onDateChange(e.target.value);
-
     }
 
     render() {
         const reportDate = this.props.reportDate;
+        console.log(reportDate);
         return(
                <div className="DayPlan">
                     <div className="alert alert-dark" role="alert"  align="center" style={{width:400}}>
@@ -177,14 +124,13 @@ class DayHead  extends React.Component{
                         <input type="date" className="form-control"
                                aria-label="Sizing example input"
                                aria-describedby="inputGroup-sizing-sm"
-                               defaultValue={this.now()}
-                               // onClick= {() => this.handleClick()}
+                               defaultValue={reportDate}
+                               // defaultValue={this.now()}
+
                                onChange={this.handleChange}
                                value ={reportDate}
-                            //this.state.reportDate
                         />
                     </div>
-                   {console.log(reportDate)}
                     <DayAlert doneMessageState = {this.props.doneMessageState}/>
                 </div>
         )
@@ -194,33 +140,25 @@ class DayHead  extends React.Component{
 class DayPlan extends React.Component{
     constructor(props) {
         super(props);
+        this.now = this.now.bind(this);
         this.handleDateChange = this.handleDateChange.bind(this);
         this.state = {
-            doneMessageState:  'Звичка - з хебіттрекера неправильна',
-            reportDate: 'tadadam',
+            doneMessageState:  'Звичка - початкове повідомлення пр звичку',
+            reportDate: this.now(),
         }
+    }
 
-        // this.handleReportDate = this.handleReportDate.bind(this);
-
-        // this.handleChange = this.handleChange.bind(this);
+    now() {
+        let curDate = new Date();
+        let year = curDate.getFullYear();
+        let month = String(curDate.getMonth()+1).padStart(2, '0');
+        let day = String(curDate.getDate()).padStart(2,'0');
+        return year+'-'+month+'-'+day
     }
 
     handleDateChange(reportDate) {
         this.setState({reportDate})
     }
-    const 
-    // state = {
-    //     doneMessageState:  'Звичка - з хебіттрекера неправильна',
-    //     reportDate: '',
-    // };
-
-
-    // handleChange(reportDate) {
-    //     this.setState({
-    //         reportDate: reportDate
-    //    });
-
-    // }
 
     updateData = (value) => {
         this.setState({ doneMessageState: value });
@@ -234,29 +172,20 @@ class DayPlan extends React.Component{
                     <DayHead
                         doneMessageState = {this.state.doneMessageState}
                         onDateChange = {this.handleDateChange}
+                        reportDate = {reportDate}
                     />
-
 
                     {this.props.habits.map((h, index) =>
                         <CheckHabit title = {h.title} isDone = {h.isDone} key={index}/>)}
-                    {/*<Buttons />*/}
 
                     <div>
                         <div className="btn-group" role="group" aria-label="Basic example" style={{width:400}}>
                             <SaveButton updateData={this.updateData} />
                             <StatButton updateData={this.updateData} />
                             <SettingsButton updateData={this.updateData} />
-
-                            {/*<button type="button" className="btn btn-secondary" onClick={() => handleClickStat()}>Статистика</button>*/}
-                            {/*<button type="button" className="btn btn-secondary">Налаштування</button>*/}
                         </div>
 
-                        {/*<div className="alert alert-light" role="alert" align="center" style={{width:400}} >*/}
-                        {/*    {this.state.name}*/}
-                        {/*</div>*/}
-
                         <div>
-                            {/*<DayAlert doneMessageState={this.state.doneMessageState}/>*/}
                             <DayAlert doneMessageState={this.state.doneMessageState}/>
                         </div>
 
