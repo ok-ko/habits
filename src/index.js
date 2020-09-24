@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import DayPlan from './DayPlan'
+import HabitTracker from "./HabitTracker";
 
 
 const Habits = [
@@ -12,13 +12,10 @@ const Habits = [
     {title: 'Smile', isDone: true}
 ];
 
-const doneMessage = `"Звичка - друга натура"`;
-
-
 
 ReactDOM.render(
   <React.StrictMode>
-      <DayPlan habits = {Habits} doneMessage = {doneMessage}/>
+      {<HabitTracker habits = {Habits}/>}
   </React.StrictMode>,
     document.getElementById('root')
 
