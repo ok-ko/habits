@@ -2,6 +2,65 @@ import React from "react";
 import './App.css'
 
 
+function habitStat(item, Report, updateReportMessage) {
+	let requiredHabit = item.title;
+	let habitTracker = '';
+	let countSuccess = 0;
+	for (let i=0; i<Report.length;i++) {
+		for (let j=0; j<Report[i].reportValues.length; j++) {
+			if (Report[i].reportValues[j].title === requiredHabit) {
+				if (Report[i].reportValues[j].isDone) {
+					habitTracker +=  '+';
+					countSuccess ++;
+				}
+				else {habitTracker +=  '-';}
+			}
+		}
+	}
+	let habitSuccess = countSuccess/Report.length*100 ;
+	if (habitSuccess === 0) {
+		habitSuccess = `Very difficult habit to instil`
+	}
+	else {
+		habitSuccess = Math.round(habitSuccess) + '% of execution';
+	}
+
+	// updateReportMessage(
+	// 	requiredHabit + ' ' +habitTracker + ' (' + habitSuccess + ')'
+	// );
+	console.log(requiredHabit + ' ' +habitTracker);
+	console.log(habitSuccess);
+}
+
+
+class ExtendedStatButton extends React.Component {
+	constructor(props){
+		super(props);
+		this.state = {name: 'analytics'};
+		this.handleClick = this.handleClick.bind(this);
+	}
+	handleClick() {
+		this.props.updateMessage(this.state.name);
+		this.props.habitsList.forEach(
+			(item) => habitStat(
+				item,
+				this.props.Report,
+				this.props.updateReportMessage));
+	}
+
+	render() {
+		return (
+			<button
+				type="button"
+				className="btn btn-secondary"
+				onClick= {() => this.handleClick()}
+			>
+				Extended stat
+			</button>
+		);
+	}
+}
+
 class StatButton extends React.Component {
   constructor(props){
     super(props);
@@ -11,23 +70,28 @@ class StatButton extends React.Component {
 
   handleClick() {
     this.props.updateMessage(this.state.name);
+    // let updateStatMessage ="";
+	  	  // for (let i=0; i< this.props.Report.length;i++) {
+	  		//   updateStatMessage +=  (
+	  		//   	this.props.Report[i].date
+	  		// 	  +  ": "
+	  		// 	  +
+	  		//     this.props.Report[i].reportValues.map(
+	  		//     	(h) => h.title + (h.isDone?' + ':' - ')
+	  		//     )
+	  		//   )
+	  		//   + "\n";
+	  	  // }
 
-    // тут треба вивести весь Report
 
-	  let updateStatMessage ="";
+	  let updateStatMessage =``;
 	  for (let i=0; i< this.props.Report.length;i++) {
-
-		  updateStatMessage +=  (
-		  	this.props.Report[i].date
-			  +  ": "
-			  +
-		    this.props.Report[i].reportSetting.map(
-		    	(h) => h.title + (h.isDone?' + ':' - ')
-		    )
-		  )
-		  + "\n";
-		//  ????????????????чому не працює перенос рядка????????????????????????
+		  updateStatMessage += ` ${this.props.Report[i].date}:${this.props.Report[i].reportValues.map((h) => h.title + (h.isDone?' +':' -'))}
+		  `;
 	  }
+
+	  console.log(updateStatMessage);
+	  //  ????????????????чому не працює перенос рядка????????????????????????
      this.props.updateReportMessage(updateStatMessage);
   }
 
@@ -69,7 +133,12 @@ class SettingsButton extends React.Component {
 }
 
 class ExecuteModeButton extends React.Component {
+	state = {
+		name: 'check your habits'
+	};
+
 	handleClick() {
+		this.props.updateData(this.state.name);
 		this.props.handleActiveModeChange('execution', '#4e8dc6','#6c757d');
 	}
 
@@ -100,13 +169,13 @@ class SaveButton extends React.Component {
     this.props.updateReport(
       this.props.Report,
       this.props.reportDate,
-      this.props.reportSetting
+      this.props.reportValues
     );
 
     let updateReportMessage =
       this.props.Report[this.props.Report.length-1].date
       +  ": " +
-      this.props.Report[this.props.Report.length-1].reportSetting.map(
+      this.props.Report[this.props.Report.length-1].reportValues.map(
         (h) =>
           h.title + (h.isDone?' + ':' - ')
       );
@@ -164,7 +233,6 @@ class ConfigureHabit extends React.Component {
 								value = "Delete"
 							>
 							</input>
-							= {this.props.habit.id} + {this.props.habit.title} + {this.props.indexItem}
 						</div>
 					</div>
 				</form>
@@ -184,28 +252,33 @@ class CheckHabit extends React.Component {
   }
 
   render() {
-    return (
-      <div className="input-group mb-3" style={{width:400}}>
-        {/*<div className="input-group-prepend">*/}
-          <div className="input-group-text">
-            <input
-              type="checkbox"
-              aria-label="Checkbox for following text input"
-              onChange={this.handleCheckboxChange}
-              defaultChecked={this.props.isDone}
-              id={this.props.id}
-            />
-          </div>
-        {/*</div>*/}
-        <input
-          type="text"
-          className="form-control"
-          aria-label="Text input with checkbox"
-          value={this.props.title}
-          readOnly={true}
-        />
-        = {this.props.id} + {String(this.props.isDone)} + {this.props.title}
-      </div>
+	 return (
+		 <div>
+			 { this.props.updateReportValues(
+				 this.props.reportValues,
+				 this.props.habit,
+				 false)}
+
+			 <div className="input-group mb-3" style={{width:400}}>
+				 {/*<div className="input-group-prepend">*/}
+				 <div className="input-group-text">
+					 <input
+						 type="checkbox"
+						 aria-label="Checkbox for following text input"
+						 onChange={this.handleCheckboxChange}
+						 defaultChecked={this.props.isDone}
+						 id={this.props.id}
+					 />
+				 </div>
+				 <input
+					 type="text"
+					 className="form-control"
+					 aria-label="Text input with checkbox"
+					 value={this.props.title}
+					 readOnly={true}
+				 />
+			 </div>
+		 </div>
     )
   }
 }
@@ -233,24 +306,10 @@ class DayHead  extends React.Component{
   }
 
   render() {
-    const reportDate = this.props.reportDate;
     return(
       <div className="DayPlan">
         <div className="alert alert-dark" role="alert"  align="center" style={{width:400}}>
           Habit tracker
-        </div>
-
-        {/*<div className="input-group input-group-sm mb-3" style={{width:400}}> </div>*/}
-        <div className="input-group input-group-sm mb-3" style={{width:400}}>
-          <div className="input-group-prepend">
-            <span className="input-group-text" id="inputGroup-sizing-sm">date</span>
-          </div>
-          <input type="date" className="form-control"
-                 aria-label="Sizing example input"
-                 aria-describedby="inputGroup-sizing-sm"
-                 defaultValue={reportDate}
-                 onChange={this.handleChange}
-          />
         </div>
         <DayAlert Message = {this.props.Message}/>
       </div>
@@ -262,7 +321,7 @@ class DayPlan extends React.Component{
   constructor(props) {
     super(props);
     this.state = {
-      Message:  'start message about useful habits',
+      Message:  'check your habits',
       reportMessage: '',
     }
   }
@@ -282,17 +341,34 @@ class DayPlan extends React.Component{
   setMode = () => {
     if (this.props.activeMode === 'execution') {
       return (
-        <div >
-          {this.props.reportSetting.map((h, index) =>
+        <div>
+	        <div className="input-group input-group-sm mb-3" style={{width:400}}>
+		        <div className="input-group-prepend">
+			        <span className="input-group-text" id="inputGroup-sizing-sm">date</span>
+		        </div>
+		        <input type="date" className="form-control"
+		               aria-label="Sizing example input"
+		               aria-describedby="inputGroup-sizing-sm"
+		               defaultValue={this.props.reportDate}
+		               onChange={this.handleChange}
+		        />
+	        </div>
+
+          {this.props.habitsList.map((h, index) =>
             <CheckHabit
               title = {h.title}
-              isDone = {h.isDone}
-              handleCheckboxChange = {this.props.handleCheckboxChange}
+              isDone = {false}
               id = {h.id}
-              key={index}/>)
+              key={index}
+              habit = {h}
+              handleCheckboxChange = {this.props.handleCheckboxChange}
+              updateReportValues = {this.props.updateReportValues}
+              reportValues = {this.props.reportValues}
+            />
+            )
           }
 	        <SaveButton
-		        reportSetting = {this.props.reportSetting}
+		        reportValues = {this.props.reportValues}
 		        updateMessage={this.updateMessage}
 		        updateReportMessage={this.updateReportMessage}
 		        reportDate = {this.props.reportDate}
@@ -348,6 +424,7 @@ class DayPlan extends React.Component{
           <div>
             <div className="btn-group" role="group" aria-label="Basic example" style={{width:400}}>
               <ExecuteModeButton
+	              updateData={this.updateMessage}
                 handleActiveModeChange = {this.props.handleActiveModeChange}
                 buttonColor = {this.props.saveButtonColor}
               />
@@ -375,7 +452,14 @@ class DayPlan extends React.Component{
                 updateMessage={this.updateMessage}
                 updateReportMessage={this.updateReportMessage}
               />
-            </div>
+
+		          <ExtendedStatButton
+			          Report = {this.props.Report}
+			          habitsList = {this.props.habitsList}
+			          updateMessage={this.updateMessage}
+			          updateReportMessage={this.updateReportMessage}
+		          />
+	          </div>
           </div>
         </div>
       </div>

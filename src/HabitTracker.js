@@ -19,14 +19,10 @@ class HabitTracker extends React.Component{
         {id:3, title:'No smoking'},
         {id:4, title:'Smile'}
         ],
-      reportSetting: [
-        {id: 0, title: 'Study English', isDone: false},
-        {id: 1, title: 'Study React', isDone: true},
-        {id: 2, title: 'Drink water', isDone: false},
-        {id: 3, title: 'No smoking', isDone: false},
-        {id: 4, title: 'Smile', isDone: false}
-      ],
+
       reportDate: this.now(),
+
+      reportValues: [],
       Report: [],
       activeMode: 'execution',
       // activeMode: 'configuration',
@@ -63,10 +59,21 @@ class HabitTracker extends React.Component{
     this.setState({reportDate})
   };
 
+  updateReportValues = (reportValues, habit, isDone) => {
+    let valueId = reportValues.find(value => value.id === habit.id);
+      if (!valueId) {
+        reportValues.push({
+          id: habit.id,
+          title:habit.title,
+          isDone:isDone, });
+      }
+  };
+
+
   handleCheckboxChange = (targetId) => {
     this.setState({
       ...this.state,
-      reportSetting: this.state.reportSetting.map(list => {
+      reportValues: this.state.reportValues.map(list => {
         if (String(list.id) === String(targetId)) {
           return {
             ...list,
@@ -96,25 +103,27 @@ class HabitTracker extends React.Component{
   };
 
   addHabitListItem = (habitsList, item) => {
-    habitsList.push({
-      id:this.ID(),
-      title:item,
-    });
-    this.setState({habitsList});
-};
+      habitsList.push({
+        id:this.ID(),
+        title:item,
+      });
+      this.setState({habitsList});
+  };
 
   delHabitListItem = (habitsList, item) => {
     habitsList.splice(item,1);
     this.setState({habitsList});
   };
 
-  updateReport = (Report, date, reportSetting) => {
+
+
+  updateReport = (Report, date, reportValues) => {
     let smthId = Report.find(smth => smth.date === date);
     if (!smthId) {
       Report.push({
         id: this.ID(),
         date: date,
-        reportSetting:reportSetting, });
+        reportValues:reportValues, });
       this.setState({Report});
     } else {alert('Запис за ' +date+' уже існує')}
   };
@@ -125,7 +134,8 @@ class HabitTracker extends React.Component{
         <div>
           <DayPlan
             habitsList = {this.state.habitsList}
-            reportSetting = {this.state.reportSetting}
+            reportValues = {this.state.reportValues}
+            updateReportValues = {this.updateReportValues}
             reportDate = {this.state.reportDate}
             updateReportDate = {this.handleDateChange}
             Report = {this.state.Report}
