@@ -1,5 +1,7 @@
 import React from "react";
 import './App.css'
+import Top from "./Top";
+import TopMessage from "./components/TopMessage";
 
 
 function habitStat(item, Report, updateReportMessage) {
@@ -283,40 +285,6 @@ class CheckHabit extends React.Component {
   }
 }
 
-function DayAlert(props) {
-  const {Message} = props;
-  return (
-    <div className="alert alert-light"
-         role="alert"
-         align="center"
-         style={{width:400}} >
-      {Message}
-    </div>
-  )
-}
-
-class DayHead  extends React.Component{
-  constructor(props) {
-    super(props);
-    this.handleChange = this.handleChange.bind(this);
-  }
-
-  handleChange(e) {
-    this.props.updateReportDate(e.target.value);
-  }
-
-  render() {
-    return(
-      <div className="DayPlan">
-        <div className="alert alert-dark" role="alert"  align="center" style={{width:400}}>
-          Habit tracker
-        </div>
-        <DayAlert Message = {this.props.Message}/>
-      </div>
-    )
-  }
-}
-
 class DayPlan extends React.Component{
   constructor(props) {
     super(props);
@@ -324,6 +292,7 @@ class DayPlan extends React.Component{
       Message:  'check your habits',
       reportMessage: '',
     }
+	  this.handleDateChange = this.handleDateChange.bind(this);
   }
 
   updateMessage = (value) => {
@@ -338,8 +307,14 @@ class DayPlan extends React.Component{
 		this.props.addHabitListItem(this.props.habitsList,"")
 	};
 
-  setMode = () => {
-    if (this.props.activeMode === 'execution') {
+	handleDateChange(e) {
+		this.props.updateReportDate(e.target.value);
+	}
+
+	SetMode = () => {
+		const { activeMode, habitsList } = this.props;
+		const { handleDateChange } = this;
+    if (activeMode === 'execution') {
       return (
         <div>
 	        <div className="input-group input-group-sm mb-3" style={{width:400}}>
@@ -350,11 +325,11 @@ class DayPlan extends React.Component{
 		               aria-label="Sizing example input"
 		               aria-describedby="inputGroup-sizing-sm"
 		               defaultValue={this.props.reportDate}
-		               onChange={this.handleChange}
+		               onChange={handleDateChange}
 		        />
 	        </div>
 
-          {this.props.habitsList.map((h, index) =>
+          {habitsList.map((h, index) =>
             <CheckHabit
               title = {h.title}
               isDone = {false}
@@ -376,7 +351,7 @@ class DayPlan extends React.Component{
 		        Report = {this.props.Report}
 	        />
 	        <div>
-		        <DayAlert Message={this.state.reportMessage}/>
+		        <TopMessage Message={this.state.reportMessage}/>
 	        </div>
         </div>
       )
@@ -415,16 +390,18 @@ class DayPlan extends React.Component{
     return (
       <div className="DayPlan">
         <div>
-          <DayHead
+          <Top
             Message = {this.state.Message}
-            updateReportDate = {this.props.updateReportDate}
-            reportDate = {this.props.reportDate}
+            // updateReportDate = {this.props.updateReportDate}
+            // reportDate = {this.props.reportDate}
           />
 
           <div>
             <div className="btn-group" role="group" aria-label="Basic example" style={{width:400}}>
               <ExecuteModeButton
 	              updateData={this.updateMessage}
+	              // updateReportDate = {this.props.updateReportDate}
+	              // reportDate = {this.props.reportDate}
                 handleActiveModeChange = {this.props.handleActiveModeChange}
                 buttonColor = {this.props.saveButtonColor}
               />
@@ -441,7 +418,7 @@ class DayPlan extends React.Component{
 	          <div>
 		          {/*---------2-------------*/}
 		          {/*чому не хоче передаватися як параметр функції*/}
-		          <this.setMode
+		          <this.SetMode
 			          activeMode = {this.props.activeMode}
 		          />
 	          </div>
