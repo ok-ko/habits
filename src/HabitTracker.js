@@ -137,7 +137,7 @@ class HabitTracker extends React.Component{
             reportValues = {this.state.reportValues}
             updateReportValues = {this.updateReportValues}
             reportDate = {this.state.reportDate}
-            updateReportDate = {this.handleDateChange}
+            handleDateChange = {this.handleDateChange}
             Report = {this.state.Report}
             updateReport = {this.updateReport}
             handleCheckboxChange = {this.handleCheckboxChange}
