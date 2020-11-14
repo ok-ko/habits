@@ -18,7 +18,7 @@ class CheckHabit extends React.Component {
 					this.props.habit,
 					false)}
 
-				<div className="input-group mb-3" style={{width:400}}>
+				<div className="input-group mb-3" >
 					<div className="input-group-text">
 						<input type="checkbox"
 						       aria-label="Checkbox for following text input"

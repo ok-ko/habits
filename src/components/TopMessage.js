@@ -6,7 +6,7 @@ function TopMessage(props) {
 		<div className="alert alert-light"
 		     role="alert"
 		     align="center"
-		     style={{width:400}} >
+		     >
 			{Message}
 		</div>
 	)

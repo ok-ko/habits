@@ -1,6 +1,7 @@
 import React from "react";
 import './App.css'
 import DayPlan from "./DayPlan";
+import Results from "./Results";
 
 class HabitTracker extends React.Component{
   constructor(props) {
@@ -28,6 +29,8 @@ class HabitTracker extends React.Component{
       // activeMode: 'configuration',
       saveButtonColor:'#4e8dc6',
       settingButtonColor:'#6c757d',
+      resultOn:false,
+      result:'results',
     }
     };
 
@@ -55,6 +58,15 @@ class HabitTracker extends React.Component{
     }
   };
 
+
+  resultShowChange = () => {
+    this.setState({resultOn:true})
+  };
+
+  updateResult =(value) => {
+    this.setState({result:value});
+  };
+
   handleDateChange = (reportDate) => {
     this.setState({reportDate})
   };
@@ -68,6 +80,8 @@ class HabitTracker extends React.Component{
           isDone:isDone, });
       }
   };
+
+
 
 
   handleCheckboxChange = (targetId) => {
@@ -128,28 +142,45 @@ class HabitTracker extends React.Component{
     } else {alert('Запис за ' +date+' уже існує')}
   };
 
+
   render() {
     return (
       <div className="HabitTracker">
-        <div>
-          <DayPlan
-            habitsList = {this.state.habitsList}
-            reportValues = {this.state.reportValues}
-            updateReportValues = {this.updateReportValues}
-            reportDate = {this.state.reportDate}
-            handleDateChange = {this.handleDateChange}
-            Report = {this.state.Report}
-            updateReport = {this.updateReport}
-            handleCheckboxChange = {this.handleCheckboxChange}
-            handleHabitListChange = {this.handleHabitListChange}
-            addHabitListItem = {this.addHabitListItem}
-            delHabitListItem = {this.delHabitListItem}
-            activeMode = {this.state.activeMode}
-            handleActiveModeChange = {this.handleActiveModeChange}
-            saveButtonColor = {this.state.saveButtonColor}
-            settingButtonColor = {this.state.settingButtonColor}
+        <div style={{float:'left', width: '50%' } }>
+          <DayPlan habitsList = {this.state.habitsList}
+                   reportValues = {this.state.reportValues}
+                   updateReportValues = {this.updateReportValues}
+                   reportDate = {this.state.reportDate}
+                   handleDateChange = {this.handleDateChange}
+                   Report = {this.state.Report}
+                   updateReport = {this.updateReport}
+                   handleCheckboxChange = {this.handleCheckboxChange}
+                   handleHabitListChange = {this.handleHabitListChange}
+                   addHabitListItem = {this.addHabitListItem}
+                   delHabitListItem = {this.delHabitListItem}
+                   activeMode = {this.state.activeMode}
+                   handleActiveModeChange = {this.handleActiveModeChange}
+                   saveButtonColor = {this.state.saveButtonColor}
+                   settingButtonColor = {this.state.settingButtonColor}
+
+                   resultShowChange ={this.resultShowChange}
+                   updateResult = {this.updateResult}
           />
         </div>
+
+        {this.state.resultOn &&
+          <div style={{float:'left', width: '50%' } }>
+            <Results resultShowChange ={this.resultShowChange}
+                     Report = {this.state.Report}
+                     updateResult = {this.updateResult}
+                     result = {this.state.result}
+
+            />
+          </div>
+        }
+
+
+
       </div>
     );
   }

@@ -1,4 +1,5 @@
 import React from "react";
+// import TopMessage from "../components/TopMessage";
 
 class SaveButton extends React.Component {
 	constructor(props){
@@ -24,6 +25,7 @@ class SaveButton extends React.Component {
 					h.title + (h.isDone?' + ':' - ')
 			);
 		this.props.updateReportMessage(updateReportMessage);
+		// TopMessage(updateReportMessage);
 	}
 
 	render() {
@@ -31,7 +33,6 @@ class SaveButton extends React.Component {
 			<button
 				type="button"
 				className="btn btn-outline-secondary"
-				style={{width:400}}
 				onClick= {() => this.handleClick()}
 			>
 				Save
